@@ -1,0 +1,8 @@
+18:48:18 **** Clean-only build of configuration Debug for project CMSISv1p30_LPC13xx ****
+make clean 
+rm -rf  ./src/core_cm3.o ./src/system_LPC13xx.o  ./src/core_cm3.d ./src/system_LPC13xx.d  libCMSISv1p30_LPC13xx.a
+ 
+18:48:18 **** Clean-only build of configuration Debug for project Mark1_DragDrop_Config ****
+make clean 
+rm -rf  ./src/chan\ fat\ fs/option/ccsbcs.o  ./src/chan\ fat\ fs/diskio.o ./src/chan\ fat\ fs/ff.o  ./src/BoardSupport.o ./src/ButtonDetect.o ./src/FLASH.o ./src/FPGA_Config.o ./src/System.o ./src/Timers.o ./src/cr_startup_lpc13.o ./src/i2c_mark1.o ./src/i2cslave.o ./src/main.o ./src/msccallback.o ./src/usbdesc.o  ./src/chan\ fat\ fs/option/ccsbcs.d  ./src/chan\ fat\ fs/diskio.d ./src/chan\ fat\ fs/ff.d  ./src/BoardSupport.d ./src/ButtonDetect.d ./src/FLASH.d ./src/FPGA_Config.d ./src/System.d ./src/Timers.d ./src/cr_startup_lpc13.d ./src/i2c_mark1.d ./src/i2cslave.d ./src/main.d ./src/msccallback.d ./src/usbdesc.d  Mark1_DragDrop_Config.axf
+ 
