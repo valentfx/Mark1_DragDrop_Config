@@ -1,17 +1,13 @@
 #include "System.h"
 
-
+//PROTOTYPES
 void FPGA_BlastConfigBytes(BYTE *Data,WORD Count);
 
-
-
+//LOCAL VARIABLES
 static uint8_t ConfigBuf[256];	//data read from the config file
-
-
 
 /***********************************************************************************
  * DESCRIPTION: send the start config sequence to the FPGA
- *
  **********************************************************************************/
 int8_t InitFPGA_Config( void){
 	uint32_t i = 0;
@@ -60,27 +56,6 @@ int8_t FPGA_Config(char * Filename)
 	}
 
 	SetLED_BlinkRate(25);	//set the blink speed - shows status of loading process
-
-
-	/*	//ADDING SEPERATE FUNCTION CALL - SO THAT I2C COMMANDS CAN ACCESS SEPERATELY
-	//send the FPGA config initialization sequence
-	CFG_PROG_B_INACTIVE;	//make sure the progb is in inactive state
-	//We need to make these speed indepedent some day.....
-	for(i=0;i<10000;i++);	//10000/fcy = 48mHZ = 200uS
-	CFG_PROG_B_ACTIVE;		//First Bring the PROG_B low
-	for(i=0;i<20000;i++);	//delay @48Mhz = 400uS
-	CFG_PROG_B_INACTIVE;	//Bring high
-	i = 0;
-	while(CFG_INIT_B_STATE == 0)	//wait for INIT_B TO go high
-	{
-		i++;
-		if(i>800000)
-		{
-		 SetLED_BlinkRate(1000);	//set blink rate to fail!
-			return CONFIG_ERROR_INIT_NOT_HIGH;
-		}
-	}
-	*/
 
 	//SEND FPGA CONFIG SETUP COMMAND
 	status = InitFPGA_Config();

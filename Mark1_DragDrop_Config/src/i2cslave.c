@@ -69,64 +69,40 @@ volatile uint8_t WrIndex = 0;
 ******************************************************************************************/
 void I2C_process_task( void)
 {
-	uint8_t cmd = 0;
-	//NEED TO HANDLE THE BITSTREAM START SEQUENCE
-	//if(i2c_lpc_mode){	//received command from i2c go into default lpc mode
-	if(i2c_task==I2C_TASK_LPC_MODE){	//received command from i2c go into default lpc mode
-		//set pins to default lpc mode
-		InitGPIO_LPC_Mode();
-		LED0_TOGGLE;
-		i2c_cmd_rx = 0;		//done processing the command
-	}
-	//if(i2c_passive_mode){	//received command from i2c go into passive mode
-	if(i2c_task==I2C_TASK_PASSIVE_MODE){	//received command from i2c go into passive mode
-		//set pins to default lpc mode
-		InitGPIO_Passive_Mode();
-		LED1_TOGGLE;
-		i2c_cmd_rx = 0;		//done processing the command
-	}
-	//if(i2c_lpc_configure){	//received command from i2c to reconfigure
-	if(i2c_task==I2C_TASK_LPC_CFG){	//received command from i2c to reconfigure
-		InitGPIO_LPC_Mode();	//make sure we are not setup for passive
-		FPGA_Config("config.bit");
-		i2c_cmd_rx = 0;		//done processing the command
-	}
-	if(i2c_task==I2C_TASK_SLAVE_CFG_INIT){	//received command from i2c to reconfigure
-		i2c_slave_cfg_init_status = -1;		//reset the return status
-		i2c_slave_cfg_init_status = InitFPGA_Config();
-		//need to setup the mux pin to give control to the master device for cclk, datain pins.
-		//InitGPIO_Passive_Mode();	//puts the LPC into passive mode, ie HiZ sahred pins,  set mux for master access to cclk, datain
-		CFG_MUX_MASTER_CTL;
-		i2c_cmd_rx = 0;		//done processing the command
-	}
+	//PROCESS I2C PENDING TASK - CURRENTLY ONLY ONE AT A TIME - NO STACK NEEDED AT THIS POINT
+	switch( i2c_task)
+	{
+		case  I2C_TASK_LPC_MODE:
+			//set pins to default lpc mode
+			InitGPIO_LPC_Mode();
+			LED0_TOGGLE;
+			i2c_cmd_rx = 0;		//done processing the command
+			break;
+		case I2C_TASK_PASSIVE_MODE:	//received command from i2c go into passive mode
+			//set pins to default lpc mode
+			InitGPIO_Passive_Mode();
+			LED1_TOGGLE;
+			i2c_cmd_rx = 0;		//done processing the command
+			break;
+		case I2C_TASK_LPC_CFG: 	//received command from i2c to reconfigure
+			InitGPIO_LPC_Mode();	//make sure we are not setup for passive
+			FPGA_Config("config.bit");
+			i2c_cmd_rx = 0;		//done processing the command
+			break;
+		case I2C_TASK_SLAVE_CFG_INIT:	//received command from i2c to reconfigure
+			i2c_slave_cfg_init_status = -1;		//reset the return status
+			i2c_slave_cfg_init_status = InitFPGA_Config();
+			CFG_MUX_MASTER_CTL;		//set the mux control pin for master peripheral control to config lines
+			i2c_cmd_rx = 0;		//done processing the command
+			break;
+		default:
+			i2c_cmd_rx = 0;		//don't know why we are here, bail.
+			break;
+	}//switch
 
 }//function
 
 
-
-
-/**********************************************************************************
-//  Table 237. Slave Receiver mode, SEE PAGE 236
-//STATUS REGISTER BIT VALUES
-//Bit 		7 		6 		5 		4 		3 		2 	1 	0
-//Symbol 	- 		I2EN 	STA 	STO 	SI 		AA 	- 	-
-//Value 	- 		1 		0 		0 		0 		1 	- 	-
-***********************************************************************************
-	//STATES USED IN THE STATE MACHINE
-	case 0x60:								// Own SLA+W has been received; ACK has been returned.
-	case 0x68: 0B 0110 1000					// Arbitration lost in SLA+R/W as master; Own SLA+W has been received, ACK returned.
-	case 0x80: 1000 0000					// data receive
-	case 0x90: 1001 0000
-
-
-	case 0xA8: 1010 1000					// An own SLA_R has been received.  	//slave Read
-	case 0xB0: 1011 0000
-
-	case 0xB8: 1011 1000					// Data byte has been transmitted
-	case 0xC8: 1100 1000
-
-	case 0xC0: 1100 1000				  // Data byte has been transmitted, NACK
-	case 0xA0: 1010 0000
 /*****************************************************************************
 ** Function name:		I2C_IRQHandler
 *****************************************************************************/

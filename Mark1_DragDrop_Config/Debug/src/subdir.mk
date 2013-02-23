@@ -11,7 +11,6 @@ C_SRCS += \
 ../src/System.c \
 ../src/Timers.c \
 ../src/cr_startup_lpc13.c \
-../src/i2c_mark1.c \
 ../src/i2cslave.c \
 ../src/main.c \
 ../src/msccallback.c \
@@ -25,7 +24,6 @@ OBJS += \
 ./src/System.o \
 ./src/Timers.o \
 ./src/cr_startup_lpc13.o \
-./src/i2c_mark1.o \
 ./src/i2cslave.o \
 ./src/main.o \
 ./src/msccallback.o \
@@ -39,7 +37,6 @@ C_DEPS += \
 ./src/System.d \
 ./src/Timers.d \
 ./src/cr_startup_lpc13.d \
-./src/i2c_mark1.d \
 ./src/i2cslave.d \
 ./src/main.d \
 ./src/msccallback.d \

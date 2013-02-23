@@ -4830,3 +4830,10 @@ Binding(ALT+ARROW_LEFT,
 !MESSAGE 15: Target error from Read Memory
 !SUBENTRY 1 com.crt.dsfdebug 4 0 2013-02-23 15:56:37.501
 !MESSAGE Cannot complete transaction, even after slowing speed.
+
+!ENTRY com.crt.dsfdebug 4 0 2013-02-23 15:57:17.211
+!MESSAGE 15: Target error from Read Memory
+!SUBENTRY 1 com.crt.dsfdebug 4 0 2013-02-23 15:57:17.211
+!MESSAGE 15: Target error from Read Memory
+!SUBENTRY 1 com.crt.dsfdebug 4 0 2013-02-23 15:57:17.211
+!MESSAGE Cannot complete transaction, even after slowing speed.

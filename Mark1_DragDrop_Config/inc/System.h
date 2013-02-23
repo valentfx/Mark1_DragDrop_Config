@@ -1,7 +1,7 @@
 #ifndef _SYSTEM_H
 #define _SYSTEM_H
 
-
+//SYSTEM INLCUDES
 #include <stdint.h>
 #include "LPC13xx.h"
 #include "usb.h"
@@ -15,10 +15,8 @@
 #include "ff.h"
 #include "BoardSupport.h"
 #include "i2cslave.h"
-#include "i2c_mark1.h"
 #include "Timers.h"
 #include "ButtonDetect.h"
-
 
 //SYSTEM FUNCTIONALITY DEFINES
 #define USE_LED_HEART_BEAT 	//use led as system heartbeat?
@@ -28,15 +26,16 @@
 #define 	STATE_LPC_LOADER	1
 #define 	STATE_MASTER_LOADER	2
 
-
 #define LED_ALWAYS_OFF 		0
 #define LED_ALWAYS_ON	 	0xFFFF
 
+//FUNCTION PROTOTYPES
 void InitUSB_MSC();
 void SetLED_BlinkRate(uint16_t BR);
 void InitSystemStateMachine( void);
 void TransitionToState(uint8_t NextState);
 
+//EXTERN VARS FOR SYSTEM
 extern 	volatile uint32_t  StartupDelay;
 extern volatile uint8_t SystemState;
 extern FATFS MyFileSystem;
