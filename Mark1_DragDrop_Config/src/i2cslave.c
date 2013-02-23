@@ -6,6 +6,15 @@ For master read: the sequence is: STA,Addr(W),offset,RE-STA,Addr(r),data...STO
 for master write: the sequence is: STA,Addr(W),offset,RE-STA,Addr(w),data...STO
 Thus, in state 8, the address is always WRITE. in state 10, the address could
 be READ or WRITE depending on the I2C command.
+********************************************************************************
+LOGi FAMILY USAGE:
+DESCRIPOTION: I2C will receive commands that can be processed the change the operation of hte LPC Chip.
+Packets: 	[1byte]  	[1byte]		[1byte]
+packet	: 	[cmd1] 		[data1]		 [data2]	.... [data7] = 8 bytes total packet
+
+The commands can be processed directly in the interrupt if very short time is needed.
+or a task flag can be set to process other more latent tasks such as fpga config initiate.
+
 *********************************************************************************/
 
 
@@ -16,13 +25,33 @@ be READ or WRITE depending on the I2C command.
 
 //I2C EXTERNAL STATUS FLAGS
 //I2C TASKS flags that need to occur outside of interrupt
-volatile uint8_t f_i2c_task = 0;	//flag to process i2c task
 
 volatile uint8_t i2c_cmd_rx = 0;
-volatile uint8_t i2c_nack_rx = 0;
+static volatile uint8_t i2c_task = 0;
+
+volatile int8_t i2c_slave_cfg_init_status = 0;	//holds the values of the fpga bitstream config sequence response
+
+/*
+//volatile uint8_t i2c_nack_rx = 0;
 volatile uint8_t i2c_lpc_mode = 0;
 volatile uint8_t i2c_passive_mode = 0;
 volatile uint8_t i2c_lpc_configure = 0;	//flag - configure  fpga with lpc
+*/
+
+//I2C TASKS THAT MIGHT NEED TO BE DONE
+#define	I2C_TASK_LPC_MODE		0X01
+#define	I2C_TASK_PASSIVE_MODE	0X02
+#define	I2C_TASK_LPC_CFG		0X03
+#define	I2C_TASK_SLAVE_CFG_INIT				0X05	//initialize the fpga bitstream config sequence
+#define	I2C_TASK_SLAVE_CFG_INIT_STAT		0X06	//status of the fpga bitstrea config sequence
+
+//THESE ARE THE CMD VALUES THAT ARE SENT FROM THE MASTER DEVICE 0-256.
+#define I2C_CMD1_PASSIVE_MODE 	0X01	//command to go into passive mode
+#define I2C_CMD1_LPC_CFG_MODE 	0X02	//command to go have LPC configure the fpga
+#define I2C_CMD1_DONE 			0X03	//did the done bit go high?
+#define I2C_CMD1_LPC_CFG 		0X04	//reconfigure the fpga
+#define I2C_CMD1_SLAVE_CFG_INIT 		0X05	//reconfigure the fpga
+#define I2C_CMD1_SLAVE_CFG_INIT_STAT 		0X06	//reconfigure the fpga
 
 
 //I2C INTERRUPT STATE MACHINE VAR
@@ -42,37 +71,37 @@ volatile uint8_t WrIndex = 0;
 * 		- Slow porcessing commands will be processed here so that the interrupt will not block communications
 
 ******************************************************************************************/
-void I2C_process_cmd( void){
+void I2C_process_task( void)
+{
 	uint8_t cmd = 0;
-
 	//NEED TO HANDLE THE BITSTREAM START SEQUENCE
+	//if(i2c_lpc_mode){	//received command from i2c go into default lpc mode
+	if(i2c_task==I2C_TASK_LPC_MODE){	//received command from i2c go into default lpc mode
+		//set pins to default lpc mode
+		InitGPIO_LPC_Mode();
+		LED0_TOGGLE;
+		i2c_cmd_rx = 0;		//done processing the command
+	}
+	//if(i2c_passive_mode){	//received command from i2c go into passive mode
+	if(i2c_task==I2C_TASK_PASSIVE_MODE){	//received command from i2c go into passive mode
+		//set pins to default lpc mode
+		InitGPIO_Passive_Mode();
+		LED1_TOGGLE;
+		i2c_cmd_rx = 0;		//done processing the command
+	}
+	//if(i2c_lpc_configure){	//received command from i2c to reconfigure
+	if(i2c_task==I2C_TASK_LPC_CFG){	//received command from i2c to reconfigure
+		InitGPIO_LPC_Mode();	//make sure we are not setup for passive
+		FPGA_Config("config.bit");
+		i2c_cmd_rx = 0;		//done processing the command
+	}
+	if(i2c_task==I2C_TASK_SLAVE_CFG_INIT){	//received command from i2c to reconfigure
+		i2c_slave_cfg_init_status = -1;		//reset the return status
+		i2c_slave_cfg_init_status = InitFPGA_Config();
+		//need to setup the mux pin to give control to the master device for cclk, datain pins.
+		InitGPIO_Passive_Mode();	//puts the LPC into passive mode, ie HiZ sahred pins,  set mux for master access to cclk, datain
 
-
-	/*	//ALL OF THIS IS NOW IN THE INTERRUPT
-	cmd = I2CRdBuffer[0];
-	switch (cmd){
-		case I2C_CMD_PASSIVE_MODE:
-			//PUT DEVICE INTO PASSIVE MODE
-			//InitGPIO_PASSIVE();
-			TransitionToState(STATE_MASTER_LOADER);
-			LED0_TOGGLE;
-			break;
-		case I2C_CMD_LPC_CFG_MODE:
-			//PUT DEVICE INTO LPC CFG MODE
-			//InitGPIO();
-			TransitionToState(STATE_LPC_LOADER);
-			LED1_TOGGLE;
-			break;
-		case I2C_CMD_DONE:
-			//send the status of done pin.
-			I2CWrBuffer[0] = CFG_DONE_STATE; //may have to add this to state machine
-			LED0_TOGGLE;
-			LED1_TOGGLE;
-			break;
-		default:
-			break;
-	}	//switch
-	*/
+	}
 
 }//function
 
@@ -170,41 +199,55 @@ void I2C_IRQHandler(void)
 		LPC_I2C->CONSET = I2CONSET_AA; 			//THIS IS NEEDED
 		I2CSlaveState = I2C_IDLE;				//restart state machine
 		//LED1_TOGGLE;
-		i2c_nack_rx = 1;	// set flag that nack was received
+		//i2c_nack_rx = 1;	//debug -  set flag that nack was received
 		WrIndex = 0;
 	break;
 
-	//STOP CONDITION - PROCESSED THE RECEIVED DATA
+	//STOP CONDITION - PROCESS THE RECEIVED DATA
 	case 0xA0:							// Stop condition or repeated start has
 		LPC_I2C->CONSET = I2CONSET_AA;	// been received, assert ACK.
 		LPC_I2C->CONCLR = I2CONCLR_SIC;
 		I2CSlaveState = I2C_IDLE;
 		//LED0_TOGGLE;
-		i2c_cmd_rx = 1;
+		//i2c_cmd_rx = 1;		// dont need anymore i2c command rx flag
 		//PROCESS THE RECEIVED COMMANDS HERE
 		rec = I2CRdBuffer[0];	//what is the first value received (command)
 		switch (rec){
-			case I2C_CMD_PASSIVE_MODE:
+			case I2C_CMD1_PASSIVE_MODE:
 				//PUT DEVICE INTO PASSIVE MODE
-				i2c_passive_mode = 1;	//set flag for main to process
+				i2c_cmd_rx = 1;
+				i2c_task = I2C_TASK_PASSIVE_MODE;
 				LED0_TOGGLE;
 				break;
-			case I2C_CMD_LPC_CFG_MODE:
+			case I2C_CMD1_LPC_CFG_MODE:
 				//PUT DEVICE INTO LPC CFG MODE
-				i2c_lpc_mode = 1;	//set flag for main to process
+				i2c_cmd_rx = 1;
+				i2c_task = I2C_TASK_LPC_MODE;
 				//LED1_TOGGLE;
 				break;
-			case I2C_CMD_DONE:
+			case I2C_CMD1_DONE:
 				//send the status of done pin.
-				//I2CWrBuffer[0] = 0xAA;	//debug send something recognizable
-				I2CWrBuffer[0] = CFG_DONE_STATE;
+				//I2CWrBuffer[0] = 0xAA;	//debug - send something recognizable
+				I2CWrBuffer[0] = CFG_DONE_STATE;	//return the value of the done pin state
 				LED0_TOGGLE;
 				LED1_TOGGLE;
 				break;
-			case I2C_CMD_LPC_CONFIGURE:
+			case I2C_CMD1_LPC_CFG:
 				//LED0_TOGGLE;
 				//LED1_TOGGLE;
-				i2c_lpc_configure = 1;	//set flag to have lpc configure the fpga
+				i2c_cmd_rx = 1;
+				i2c_task = I2C_TASK_LPC_CFG;
+				break;
+			case I2C_CMD1_SLAVE_CFG_INIT:
+				//LED0_TOGGLE;
+				//LED1_TOGGLE;
+				i2c_cmd_rx = 1;
+				i2c_task = I2C_TASK_SLAVE_CFG_INIT;
+				break;
+			case I2C_CMD1_SLAVE_CFG_INIT_STAT:
+				//LED0_TOGGLE;
+				//LED1_TOGGLE;
+				I2CWrBuffer[0] = i2c_slave_cfg_init_status;		//did initb go high?
 				break;
 			default:
 				break;
@@ -299,35 +342,30 @@ void Init_i2c_buf( void){
 /*******************************************************************************
 **   Main Function  main()
 *******************************************************************************/
+/*
 int example_main (void)
 {
-	  /* Basic chip initialization is taken care of in SystemInit() called
-	   * from the startup code. SystemInit() and chip settings are defined
-	   * in the CMSIS system_<part family>.c file.
-	   */
-
-  uint32_t i;
+	    uint32_t i;
 
   for ( i = 0; i < BUFSIZE; i++ )
   {
 	I2CRdBuffer[i] = 0x00;
   }
 
-  I2CSlaveInit();			/* initialize I2c */
+  I2CSlaveInit();
 
-  /* When the NACK occurs, the master has stopped the
-  communication. Just check the content of I2CRd/WrBuffer. */
-	//DEBUG I2C ONLY - WAITS FOR I2C TRANSACTION TO COMPLETE.
-	//WAIT UNTIL A NACK IS RECEIVED.  (Master stopped a complete transaction)
 	while ( I2CSlaveState != DATA_NACK );
 	LED1_TOGGLE;
-	LPC_I2C->CONSET = I2CONSET_AA;	/* been received, assert ACK.  */
+	LPC_I2C->CONSET = I2CONSET_AA;
 	LPC_I2C->CONCLR = I2CONCLR_SIC;
 	I2CSlaveState = I2C_IDLE;
 	Init_i2c_buf();
 
 
 }//example
+*/
+
+
 
 /******************************************************************************
 **                            End Of File

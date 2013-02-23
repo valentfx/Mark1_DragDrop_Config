@@ -41,8 +41,6 @@ void InitGPIO()
 
 
 	// I2C PINS SETUP IN I2CSLAVE INIT
-
-	
 	
 	//SETUP LOGIC LEVEL ON PINS
 	FPGA_SUSPEND_INACTIVE;
@@ -50,7 +48,7 @@ void InitGPIO()
 	CFG_CCLK_INACTIVE;
 	CFG_DIN_INACTIVE;
 	CFG_MODE1_SLAVE;		//configure in serial slave mode
-	CFG_MUX_LPC;			//select LPC as serial configuration device
+	CFG_MUX_LPC_CTL;			//select LPC as serial configuration device
 
 }//INITGPIO
 
@@ -76,7 +74,7 @@ void InitGPIO_Passive_Mode( void)
 
 	//SETUP LOGIC LEVEL ON PINS
 	CFG_MODE1_SLAVE;		//configure in serial slave mode
-	CFG_MUX_PERIPH;			//select Master as serial config device for selection on mux
+	CFG_MUX_MASTER_CTL;			//select Master as serial config device for selection on mux
 
 	//CFG_MODE1_MASTER; //SET MODE1 LOW TO SETUP FOR SELF CONFIG RATHER THAN SLAVE CONFIG BY DEFAULT
 
@@ -110,7 +108,7 @@ void InitGPIO_LPC_Mode()
 	CFG_CCLK_INACTIVE;
 	CFG_DIN_INACTIVE;
 	CFG_MODE1_SLAVE;		//configure in serial slave mode
-	CFG_MUX_LPC;			//select LPC as serial configuration device
+	CFG_MUX_LPC_CTL;			//select LPC as serial configuration device
 
 
 }//INITGPIO
@@ -143,7 +141,7 @@ void InitGPIO_State( void){
 	CFG_CCLK_INACTIVE;
 	CFG_DIN_INACTIVE;
 	CFG_MODE1_SLAVE;		//configure in serial slave mode
-	CFG_MUX_LPC;			//select LPC as serial configuration device
+	CFG_MUX_LPC_CTL;			//select LPC as serial configuration device
 
 }
 

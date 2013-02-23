@@ -60,8 +60,8 @@
 #define CFG_FLASH_CS_INACTIVE		LPC_GPIO2->DATA |= CFG_FLASH_CS_LOC		//HIGH
 #define CFG_FLASH_RST_ACTIVE		LPC_GPIO1->DATA &= ~CFG_FLASH_RST_LOC	//LOW
 #define CFG_FLASH_RST_INACTIVE		LPC_GPIO1->DATA |= CFG_FLASH_RST_LOC	//HIGH
-#define CFG_MUX_LPC					LPC_GPIO2->DATA |= CFG_MUX_SEL_LOC		//HIGH - select LPC as much to configure FPGA
-#define CFG_MUX_PERIPH				LPC_GPIO2->DATA &= ~CFG_MUX_SEL_LOC		//LOW - select Pi/Bone as much to configure FPGA
+#define CFG_MUX_LPC_CTL					LPC_GPIO2->DATA |= CFG_MUX_SEL_LOC		//HIGH - select LPC as much to configure FPGA
+#define CFG_MUX_MASTER_CTL				LPC_GPIO2->DATA &= ~CFG_MUX_SEL_LOC		//LOW - select Pi/Bone as much to configure FPGA
 #define CFG_MODE1_MASTER			LPC_GPIO2->DATA &= ~CFG_MODE1_LOC		//LOW
 #define CFG_MODE1_SLAVE				LPC_GPIO2->DATA |= CFG_MODE1_LOC		//HIGH
 

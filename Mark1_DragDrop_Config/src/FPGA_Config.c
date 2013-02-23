@@ -13,7 +13,7 @@ static uint8_t ConfigBuf[256];	//data read from the config file
  * DESCRIPTION: send the start config sequence to the FPGA
  *
  **********************************************************************************/
-uint8_t InitFPGA_Config( void){
+int8_t InitFPGA_Config( void){
 	uint32_t i = 0;
 
 	//send the FPGA config initialization sequence

@@ -12,10 +12,6 @@ extern volatile uint8_t i2c_passive_mode;
 #define I2C_RD_BUF_SIZE 8
 #define I2C_WR_BUF_SIZE 8
 
-#define I2C_CMD_PASSIVE_MODE 	0X01	//command to go into passive mode
-#define I2C_CMD_LPC_CFG_MODE 	0X02	//command to go have LPC configure the fpga
-#define I2C_CMD_DONE 			0X03	//did the done bit go high?
-#define I2C_CMD_LPC_CONFIGURE 	0X04	//reconfigure the fpga
 
 //#define I2C_SLAVE_ADDR	0X70	//bits 7:1 are the 7 bit slave address.  bit 0 is a control bit.
 #define I2C_SLAVE_ADDR	0X70	//7 BIT SLAVE ADDRESS
@@ -67,7 +63,7 @@ extern volatile uint8_t i2c_passive_mode;
 extern void I2C_IRQHandler( void );
 extern void I2CSlaveInit( void );
 void Init_i2c_buf( void);
-void I2C_process_cmd( void);
+void I2C_process_task( void);
 
 #endif /* end __I2C_H */
 /****************************************************************************

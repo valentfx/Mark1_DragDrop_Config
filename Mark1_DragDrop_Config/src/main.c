@@ -68,23 +68,11 @@ int main (void)
 
 
 		//MAIN FRONT END TASKS
-		if(i2c_lpc_mode){	//received command from i2c go into default lpc mode
-			//set pins to default lpc mode
-			InitGPIO_LPC_Mode();
-			LED0_TOGGLE;
-			i2c_lpc_mode=0;
+		if(i2c_cmd_rx){
+			I2C_process_task();
 		}
-		if(i2c_passive_mode){	//received command from i2c go into passive mode
-			//set pins to default lpc mode
-			InitGPIO_Passive_Mode();
-			LED1_TOGGLE;
-			i2c_passive_mode=0;
-		}
-		if(i2c_lpc_configure){	//received command from i2c to reconfigure
-			InitGPIO_LPC_Mode();	//make sure we are not setup for passive
-			FPGA_Config("config.bit");
-			i2c_lpc_configure=0;
-		}
+
+
 
 
 
