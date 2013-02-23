@@ -31,7 +31,7 @@ all: Mark1_DragDrop_Config.axf
 Mark1_DragDrop_Config.axf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU Linker'
-	arm-none-eabi-gcc -nostdlib -L"D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\CreateGit\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug" -Xlinker --gc-sections -Xlinker -Map=Mark1_DragDrop_Config.map -mcpu=cortex-m3 -mthumb -T ../ld/usb_buffer.ld -o "Mark1_DragDrop_Config.axf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -nostdlib -L"D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug" -Xlinker --gc-sections -Xlinker -Map=Mark1_DragDrop_Config.map -mcpu=cortex-m3 -mthumb -T ../ld/usb_buffer.ld -o "Mark1_DragDrop_Config.axf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build

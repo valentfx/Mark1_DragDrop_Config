@@ -18,34 +18,40 @@ int main (void)
 	uint8_t temp = 0;
 	uint8_t t1 = 0;
 
-
-	InitGPIO();		//initialize the GPIO pins
+	InitGPIO();				//initialize the GPIO pins
 	SysTick_Config(SystemCoreClock/1000);	//setup timer tick - Interrupt found in system.c to handle system flags etc.  tasks should be called from while loop.
 
-	//SETUP I2C PERIPHS - NEEDS SETUP BEFORE INITUSB_MSC - CAUSED A LOCKUP WHEN PLACED AFTER.
-	Init_i2c_buf();	//Debug I2c.  clear the buffer
-	I2CSlaveInit();	//initialize the i2c drivers - all i2c transaction happen in i2cslave.c interrupt.  There is a state machine there.
+	LED0_ON;
 
-	InitTimers();	//SETUP SYSTEM TIMERS
+	//SETUP I2C PERIPHS - NEEDS SETUP BEFORE INITUSB_MSC - CAUSED A LOCKUP WHEN PLACED AFTER.
+	Init_i2c_buf();			//Debug I2c.  clear the buffer
+	I2CSlaveInit();			//initialize the i2c drivers - all i2c transaction happen in i2cslave.c interrupt.  There is a state machine there.
+
+	InitTimers();			//SETUP SYSTEM TIMERS
 	InitButtonDetectAll();	//SETUP BUTTON DEBOUNCE structures
 
 	//THESE FUNCTIONS ARE FOR THE MARK-1 USB, FLASH, LOAD CONFIG.BIT
-	InitFLASH();		//init flash memory.
-	InitUSB_MSC();	//init usb mass storage device drivers
-	StartDel();		//init startup delay
+	InitFLASH();				//init flash memory.
+	InitUSB_MSC();				//init usb mass storage device drivers
+	StartDel();					//init startup delay
 	//SETUP FILE SYSTEM
-	f_mount(0,&MyFileSystem);		//mount file system for reading config.bit file form MSD
+	f_mount(0,&MyFileSystem);	//mount file system for reading config.bit file form MSD
 
 
-	FPGA_Config("config.bit");      //check to see if there is a "config.bit" file if so load it into FPGA.  Note this needs to go into while loop
-										// to check for new config file loaded and reload to FPGA.  This is why there currently needs to be a power cycle
-										// in order for new file to be loaded into fpga.
-
-
+#ifdef USE_DRAG_DROP_BISTREAM
+	//THESE FUNCTIONS ARE FOR THE MARK-1 USB, FLASH, LOAD CONFIG.BIT
+	InitFLASH();				//init flash memory.
+	InitUSB_MSC();				//init usb mass storage device drivers
+	StartDel();					//init startup delay
+	//SETUP FILE SYSTEM
+	f_mount(0,&MyFileSystem);	//mount file system for reading config.bit file form MSD
+	FPGA_Config("config.bit");  //check to see if there is a "config.bit" file if so load it into FPGA.  Note this needs to go into while loop
+								// to check for new config file loaded and reload to FPGA.  This is why there currently needs to be a power cycle
+								// in order for new file to be loaded into fpga.
+#endif
 
 	LED1_OFF;
 	LED0_OFF;
-
 
 	//test pb and sense pin(had to drop resistance to 27 ohms!?) still no sure why.  internal pullup/pulldown confilict of some sort!!
 	//setup pb pin

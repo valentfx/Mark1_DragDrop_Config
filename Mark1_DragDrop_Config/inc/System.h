@@ -22,7 +22,7 @@
 
 //SYSTEM FUNCTIONALITY DEFINES
 #define USE_LED_HEART_BEAT 	//use led as system heartbeat?
-
+//#define USE_DRAG_DROP_BISTREAM	//enable drag and drop bitstream functionality
 
 #define 	STATE_SYS_STARTUP 	0
 #define 	STATE_LPC_LOADER	1

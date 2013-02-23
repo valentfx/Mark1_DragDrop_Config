@@ -15,32 +15,40 @@ be READ or WRITE depending on the I2C command.
 #include "i2cslave.h"
 
 //I2C EXTERNAL STATUS FLAGS
+//I2C TASKS flags that need to occur outside of interrupt
+volatile uint8_t f_i2c_task = 0;	//flag to process i2c task
+
 volatile uint8_t i2c_cmd_rx = 0;
 volatile uint8_t i2c_nack_rx = 0;
 volatile uint8_t i2c_lpc_mode = 0;
 volatile uint8_t i2c_passive_mode = 0;
 volatile uint8_t i2c_lpc_configure = 0;	//flag - configure  fpga with lpc
 
-//volatile uint32_t I2CMasterState = I2C_IDLE; //NOT USED IN SLAVE MODE
+
+//I2C INTERRUPT STATE MACHINE VAR
 volatile uint32_t I2CSlaveState = I2C_IDLE;	//interrupt state varialbe
-
-//volatile uint32_t I2CMode;
-
+//I2C READ/WR BUFFERS
 volatile uint8_t I2CWrBuffer[I2C_WR_BUF_SIZE];	//data to write to i2c bus
 volatile uint8_t I2CRdBuffer[I2C_RD_BUF_SIZE];	//data read from i2c bus
-volatile uint32_t I2CSlaveState;					//state machine for i2c slave interrupt
+//volatile uint32_t I2CSlaveState;					//state machine for i2c slave interrupt
 volatile uint32_t I2CReadLength, I2CWriteLength;	//lengh of the read write buffers
-
+//INDEX VALUES FOR THE READ/WR BUFFERS
 volatile uint8_t RdIndex = 0;
 volatile uint8_t WrIndex = 0;
 
 
-/*****************************************************************************************
- * Process the received i2c command
- ******************************************************************************************/
+/* *****************************************************************************************
+* DESCRIPTION: Process commands I2C commands that are not processed in the interrupt.
+* 		- Slow porcessing commands will be processed here so that the interrupt will not block communications
+
+******************************************************************************************/
 void I2C_process_cmd( void){
 	uint8_t cmd = 0;
 
+	//NEED TO HANDLE THE BITSTREAM START SEQUENCE
+
+
+	/*	//ALL OF THIS IS NOW IN THE INTERRUPT
 	cmd = I2CRdBuffer[0];
 	switch (cmd){
 		case I2C_CMD_PASSIVE_MODE:
@@ -64,8 +72,11 @@ void I2C_process_cmd( void){
 		default:
 			break;
 	}	//switch
+	*/
 
 }//function
+
+
 
 
 /**********************************************************************************
@@ -262,7 +273,7 @@ void I2CSlaveInit( void )
 
   LPC_I2C->CONSET = I2CONSET_I2EN | I2CONSET_SI;
   return;
-}
+}//i2c slave init
 
 
 // init i2c test buffer **************************************************
@@ -281,8 +292,6 @@ void Init_i2c_buf( void){
 		I2CWrBuffer[i] = ;
 	  }
 	  */
-
-
 }
 
 
@@ -320,8 +329,11 @@ int example_main (void)
 
 }//example
 
-
 /******************************************************************************
 **                            End Of File
 ******************************************************************************/
+
+
+
+
 
