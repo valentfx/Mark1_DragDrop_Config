@@ -4818,3 +4818,15 @@ Binding(ALT+ARROW_LEFT,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.cdt.dsf 4 10004 2013-02-23 15:56:35.495
+!MESSAGE Invalid breakpoint parameter(s)
+!SUBENTRY 1 org.eclipse.cdt.dsf.gdb 4 10004 2013-02-23 15:56:35.495
+!MESSAGE Invalid breakpoint parameter(s)
+
+!ENTRY com.crt.dsfdebug 4 0 2013-02-23 15:56:37.501
+!MESSAGE 15: Target error from Read Memory
+!SUBENTRY 1 com.crt.dsfdebug 4 0 2013-02-23 15:56:37.501
+!MESSAGE 15: Target error from Read Memory
+!SUBENTRY 1 com.crt.dsfdebug 4 0 2013-02-23 15:56:37.501
+!MESSAGE Cannot complete transaction, even after slowing speed.

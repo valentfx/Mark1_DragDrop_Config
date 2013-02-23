@@ -14,7 +14,10 @@ packet	: 	[cmd1] 		[data1]		 [data2]	.... [data7] = 8 bytes total packet
 
 The commands can be processed directly in the interrupt if very short time is needed.
 or a task flag can be set to process other more latent tasks such as fpga config initiate.
-
+1) To add a command, add a #define and invrement the command number.
+2) check for the command in the switch statement in the i2c irq.  the command can be direclty
+	processed (if very quick), or set a task that be processed in order not to block the irq or program.
+3) If needed add a task define, set the defined task to be processed in "I2C_process_task"
 *********************************************************************************/
 
 
@@ -30,13 +33,6 @@ volatile uint8_t i2c_cmd_rx = 0;
 static volatile uint8_t i2c_task = 0;
 
 volatile int8_t i2c_slave_cfg_init_status = 0;	//holds the values of the fpga bitstream config sequence response
-
-/*
-//volatile uint8_t i2c_nack_rx = 0;
-volatile uint8_t i2c_lpc_mode = 0;
-volatile uint8_t i2c_passive_mode = 0;
-volatile uint8_t i2c_lpc_configure = 0;	//flag - configure  fpga with lpc
-*/
 
 //I2C TASKS THAT MIGHT NEED TO BE DONE
 #define	I2C_TASK_LPC_MODE		0X01
@@ -99,8 +95,9 @@ void I2C_process_task( void)
 		i2c_slave_cfg_init_status = -1;		//reset the return status
 		i2c_slave_cfg_init_status = InitFPGA_Config();
 		//need to setup the mux pin to give control to the master device for cclk, datain pins.
-		InitGPIO_Passive_Mode();	//puts the LPC into passive mode, ie HiZ sahred pins,  set mux for master access to cclk, datain
-
+		//InitGPIO_Passive_Mode();	//puts the LPC into passive mode, ie HiZ sahred pins,  set mux for master access to cclk, datain
+		CFG_MUX_MASTER_CTL;
+		i2c_cmd_rx = 0;		//done processing the command
 	}
 
 }//function

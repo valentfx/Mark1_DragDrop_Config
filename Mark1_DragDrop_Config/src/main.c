@@ -1,27 +1,15 @@
-//updating code for PCB version RA1.2 - main changes in pin definitions
-
+/********************************************************************************************
+ * LOGi-MARK1 lPC1343 firmware
+ * REVISIONS:
+ * - added i2c slave interface for master peripherals to take control of bitstream loading, state, etc
+ */
 #include "System.h"
 
-
-extern volatile uint8_t i2c_cmd_rx;
-extern volatile uint8_t i2c_nack_rx;
-
-
-//test pio1_5 test point as input
-#define T4_LOC (1<<5)	//P1_5
-
-
-//MAIN********
+//MAIN****************************************************************************************
 int main (void)
 {
-	uint32_t del = 0;
-	uint8_t temp = 0;
-	uint8_t t1 = 0;
-
 	InitGPIO();				//initialize the GPIO pins
 	SysTick_Config(SystemCoreClock/1000);	//setup timer tick - Interrupt found in system.c to handle system flags etc.  tasks should be called from while loop.
-
-	LED0_ON;
 
 	//SETUP I2C PERIPHS - NEEDS SETUP BEFORE INITUSB_MSC - CAUSED A LOCKUP WHEN PLACED AFTER.
 	Init_i2c_buf();			//Debug I2c.  clear the buffer
@@ -38,48 +26,40 @@ int main (void)
 	f_mount(0,&MyFileSystem);	//mount file system for reading config.bit file form MSD
 
 
-#ifdef USE_DRAG_DROP_BISTREAM
-	//THESE FUNCTIONS ARE FOR THE MARK-1 USB, FLASH, LOAD CONFIG.BIT
-	InitFLASH();				//init flash memory.
-	InitUSB_MSC();				//init usb mass storage device drivers
-	StartDel();					//init startup delay
-	//SETUP FILE SYSTEM
-	f_mount(0,&MyFileSystem);	//mount file system for reading config.bit file form MSD
-	FPGA_Config("config.bit");  //check to see if there is a "config.bit" file if so load it into FPGA.  Note this needs to go into while loop
-								// to check for new config file loaded and reload to FPGA.  This is why there currently needs to be a power cycle
-								// in order for new file to be loaded into fpga.
+#ifdef USE_DRAG_DROP_BISTREAM_STARTUP
+	if(!MASTER_SENSE_STATE)	//only configure on startup if the master peripheral is not present
+	{
+		//THESE FUNCTIONS ARE FOR THE MARK-1 USB, FLASH, LOAD CONFIG.BIT
+		InitFLASH();				//init flash memory.
+		InitUSB_MSC();				//init usb mass storage device drivers
+		StartDel();					//init startup delay
+		//SETUP FILE SYSTEM
+		f_mount(0,&MyFileSystem);	//mount file system for reading config.bit file form MSD
+		FPGA_Config("config.bit");  //check to see if there is a "config.bit" file if so load it into FPGA.  Note this needs to go into while loop
+	}								// to check for new config file loaded and reload to FPGA.  This is why there currently needs to be a power cycle
+									// in order for new file to be loaded into fpga.
 #endif
 
 	LED1_OFF;
 	LED0_OFF;
 
-	//test pb and sense pin(had to drop resistance to 27 ohms!?) still no sure why.  internal pullup/pulldown confilict of some sort!!
-	//setup pb pin
-
-
-
-
-
 	while(1)
 	{
 
-		// WILL ADD IN A BASIC TASK HANDLER THAT IS NOT RUN IN THE SYSTEM IRQ
-		Basic_Tasks();
-
-
 		//MAIN FRONT END TASKS
-		if(i2c_cmd_rx){
+		Basic_Tasks();	// BASIC TASK HANDLER THAT IS NOT RUN IN THE SYSTEM IRQ
+		if(i2c_cmd_rx)	//i2c non-irq task handler
+		{
 			I2C_process_task();
 		}
-
-
-
-
 
 	}//while
 }//main
 
 
+/***********************************************************************************************
+ * Description:Basic tasks that are not time criticial.  Otherwise add tasks to system IRQ
+ */
 void Basic_Tasks(){
 
 	//TimerTest();
@@ -95,9 +75,10 @@ void Basic_Tasks(){
 }
 
 
-
-
-// *****************************************************************************
+//EOF
+// ************************************************************************************************
+// debug - unused code *****************************************************************************
+/*
 void debug_master_sense( void){
 	uint8_t temp = 0;
 
@@ -114,6 +95,7 @@ void debug_master_sense( void){
 	}
 
 }
+*/
 
 
 //MAIN STATE MACHINE.  NOT NEEDED YET
@@ -164,14 +146,3 @@ void debug_master_sense( void){
 				break;
 		}
 		*/
-
-
-
-//EOF
-
-
-
-
-
-
-

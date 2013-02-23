@@ -110,8 +110,6 @@ Discarded input sections
  .text          0x00000000        0x0 ./src/main.o
  .data          0x00000000        0x0 ./src/main.o
  .bss           0x00000000        0x0 ./src/main.o
- .text.debug_master_sense
-                0x00000000       0xac ./src/main.o
  .text          0x00000000        0x0 ./src/msccallback.o
  .data          0x00000000        0x0 ./src/msccallback.o
  .text          0x00000000        0x0 ./src/usbdesc.o
@@ -155,7 +153,7 @@ END GROUP
                 0x00008000                __top_MFlash32 = 0x8000
                 0x10002000                __top_RamLoc8 = 0x10002000
 
-.text           0x00000000     0x55bc
+.text           0x00000000     0x5600
  *(.isr_vector)
  .isr_vector    0x00000000      0x124 ./src/cr_startup_lpc13.o
                 0x00000000                g_pfnVectors
@@ -365,67 +363,68 @@ END GROUP
  .text.NVIC_EnableIRQ
                 0x00004508       0x38 ./src/i2cslave.o
  .text.I2C_process_task
-                0x00004540      0x10c ./src/i2cslave.o
+                0x00004540      0x13c ./src/i2cslave.o
                 0x00004540                I2C_process_task
  .text.I2C_IRQHandler
-                0x0000464c      0x38c ./src/i2cslave.o
-                0x0000464c                I2C_IRQHandler
+                0x0000467c      0x38c ./src/i2cslave.o
+                0x0000467c                I2C_IRQHandler
  .text.I2CSlaveInit
-                0x000049d8       0xe4 ./src/i2cslave.o
-                0x000049d8                I2CSlaveInit
+                0x00004a08       0xe4 ./src/i2cslave.o
+                0x00004a08                I2CSlaveInit
  .text.Init_i2c_buf
-                0x00004abc       0x4c ./src/i2cslave.o
-                0x00004abc                Init_i2c_buf
+                0x00004aec       0x4c ./src/i2cslave.o
+                0x00004aec                Init_i2c_buf
  .text.NVIC_SetPriority
-                0x00004b08       0x5c ./src/main.o
+                0x00004b38       0x5c ./src/main.o
  .text.SysTick_Config
-                0x00004b64       0x64 ./src/main.o
- .text.main     0x00004bc8      0x104 ./src/main.o
-                0x00004bc8                main
+                0x00004b94       0x64 ./src/main.o
+ .text.main     0x00004bf8      0x10c ./src/main.o
+                0x00004bf8                main
  .text.Basic_Tasks
-                0x00004ccc       0x34 ./src/main.o
-                0x00004ccc                Basic_Tasks
+                0x00004d04       0x34 ./src/main.o
+                0x00004d04                Basic_Tasks
  .text.MSC_MemoryRead
-                0x00004d00       0x54 ./src/msccallback.o
-                0x00004d00                MSC_MemoryRead
+                0x00004d38       0x54 ./src/msccallback.o
+                0x00004d38                MSC_MemoryRead
  .text.MSC_MemoryWrite
-                0x00004d54       0x60 ./src/msccallback.o
-                0x00004d54                MSC_MemoryWrite
- .text.__NOP    0x00004db4        0xc D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+                0x00004d8c       0x60 ./src/msccallback.o
+                0x00004d8c                MSC_MemoryWrite
+ .text.__NOP    0x00004dec        0xc D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
  .text.SystemInit
-                0x00004dc0      0x200 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
-                0x00004dc0                SystemInit
+                0x00004df8      0x200 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+                0x00004df8                SystemInit
  *(.rodata*)
- .rodata        0x00004fc0      0x4c0 ./src/chan fat fs/option/ccsbcs.o
- .rodata        0x00005480       0xa4 ./src/chan fat fs/ff.o
- .rodata        0x00005524        0xc ./src/i2cslave.o
- .rodata        0x00005530       0x1c ./src/msccallback.o
-                0x00005530                InquiryStr
- .rodata        0x0000554c       0x70 ./src/usbdesc.o
-                0x0000554c                USB_StringDescriptor
+ .rodata        0x00004ff8      0x4c0 ./src/chan fat fs/option/ccsbcs.o
+ .rodata        0x000054b8       0xa4 ./src/chan fat fs/ff.o
+ .rodata        0x0000555c        0xc ./src/i2cslave.o
+ .rodata        0x00005568        0xc ./src/main.o
+ .rodata        0x00005574       0x1c ./src/msccallback.o
+                0x00005574                InquiryStr
+ .rodata        0x00005590       0x70 ./src/usbdesc.o
+                0x00005590                USB_StringDescriptor
 
-.glue_7         0x000055bc        0x0
+.glue_7         0x00005600        0x0
  .glue_7        0x00000000        0x0 linker stubs
 
-.glue_7t        0x000055bc        0x0
+.glue_7t        0x00005600        0x0
  .glue_7t       0x00000000        0x0 linker stubs
 
-.vfp11_veneer   0x000055bc        0x0
+.vfp11_veneer   0x00005600        0x0
  .vfp11_veneer  0x00000000        0x0 linker stubs
 
-.v4_bx          0x000055bc        0x0
+.v4_bx          0x00005600        0x0
  .v4_bx         0x00000000        0x0 linker stubs
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x000055bc                __exidx_start = .
+                0x00005600                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x000055bc                __exidx_end = .
-                0x000055bc                _etext = .
+                0x00005600                __exidx_end = .
+                0x00005600                _etext = .
 
-.data           0x10000180        0x8 load address 0x000055bc
+.data           0x10000180        0x8 load address 0x00005600
                 0x10000180                _data = .
  *(vtable)
  *(.data*)
@@ -435,7 +434,7 @@ END GROUP
                 0x10000184                SystemCoreClock
                 0x10000188                _edata = .
 
-.bss            0x10000188      0x7d8 load address 0x000055c4
+.bss            0x10000188      0x7d8 load address 0x00005608
                 0x10000188                _bss = .
  *(.bss*)
  .bss           0x10000188      0x208 ./src/chan fat fs/ff.o
@@ -486,7 +485,7 @@ END GROUP
                 0x10001ff0                _vStackTop = (_vRamTop - 0x10)
 OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
 
-.debug_info     0x00000000     0x756c
+.debug_info     0x00000000     0x751b
  .debug_info    0x00000000      0x165 ./src/chan fat fs/option/ccsbcs.o
  .debug_info    0x00000165      0x29f ./src/chan fat fs/diskio.o
  .debug_info    0x00000404     0x1ad5 ./src/chan fat fs/ff.o
@@ -499,12 +498,12 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_info    0x00005129      0x221 ./src/cr_startup_lpc13.o
  .debug_info    0x0000534a      0x214 ./src/i2c_mark1.o
  .debug_info    0x0000555e      0xec3 ./src/i2cslave.o
- .debug_info    0x00006421      0x957 ./src/main.o
- .debug_info    0x00006d78      0x1c1 ./src/msccallback.o
- .debug_info    0x00006f39       0xc3 ./src/usbdesc.o
- .debug_info    0x00006ffc      0x570 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+ .debug_info    0x00006421      0x906 ./src/main.o
+ .debug_info    0x00006d27      0x1c1 ./src/msccallback.o
+ .debug_info    0x00006ee8       0xc3 ./src/usbdesc.o
+ .debug_info    0x00006fab      0x570 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_abbrev   0x00000000     0x1554
+.debug_abbrev   0x00000000     0x151f
  .debug_abbrev  0x00000000       0xa9 ./src/chan fat fs/option/ccsbcs.o
  .debug_abbrev  0x000000a9       0xdd ./src/chan fat fs/diskio.o
  .debug_abbrev  0x00000186      0x16e ./src/chan fat fs/ff.o
@@ -517,12 +516,12 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_abbrev  0x00000d0c       0xd6 ./src/cr_startup_lpc13.o
  .debug_abbrev  0x00000de2      0x104 ./src/i2c_mark1.o
  .debug_abbrev  0x00000ee6      0x20c ./src/i2cslave.o
- .debug_abbrev  0x000010f2      0x213 ./src/main.o
- .debug_abbrev  0x00001305       0xe4 ./src/msccallback.o
- .debug_abbrev  0x000013e9       0x7b ./src/usbdesc.o
- .debug_abbrev  0x00001464       0xf0 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+ .debug_abbrev  0x000010f2      0x1de ./src/main.o
+ .debug_abbrev  0x000012d0       0xe4 ./src/msccallback.o
+ .debug_abbrev  0x000013b4       0x7b ./src/usbdesc.o
+ .debug_abbrev  0x0000142f       0xf0 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_loc      0x00000000     0x194e
+.debug_loc      0x00000000     0x190a
  .debug_loc     0x00000000       0x70 ./src/chan fat fs/option/ccsbcs.o
  .debug_loc     0x00000070      0x144 ./src/chan fat fs/diskio.o
  .debug_loc     0x000001b4      0x9e8 ./src/chan fat fs/ff.o
@@ -535,11 +534,11 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_loc     0x000013d6      0x1f0 ./src/cr_startup_lpc13.o
  .debug_loc     0x000015c6       0x64 ./src/i2c_mark1.o
  .debug_loc     0x0000162a      0x10c ./src/i2cslave.o
- .debug_loc     0x00001736      0x10c ./src/main.o
- .debug_loc     0x00001842       0x70 ./src/msccallback.o
- .debug_loc     0x000018b2       0x9c D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+ .debug_loc     0x00001736       0xc8 ./src/main.o
+ .debug_loc     0x000017fe       0x70 ./src/msccallback.o
+ .debug_loc     0x0000186e       0x9c D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_aranges  0x00000000      0x538
+.debug_aranges  0x00000000      0x530
  .debug_aranges
                 0x00000000       0x28 ./src/chan fat fs/option/ccsbcs.o
  .debug_aranges
@@ -565,13 +564,13 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_aranges
                 0x00000460       0x40 ./src/i2cslave.o
  .debug_aranges
-                0x000004a0       0x40 ./src/main.o
+                0x000004a0       0x38 ./src/main.o
  .debug_aranges
-                0x000004e0       0x28 ./src/msccallback.o
+                0x000004d8       0x28 ./src/msccallback.o
  .debug_aranges
-                0x00000508       0x30 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+                0x00000500       0x30 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_ranges   0x00000000      0x448
+.debug_ranges   0x00000000      0x440
  .debug_ranges  0x00000000       0x18 ./src/chan fat fs/option/ccsbcs.o
  .debug_ranges  0x00000018       0x38 ./src/chan fat fs/diskio.o
  .debug_ranges  0x00000050      0x170 ./src/chan fat fs/ff.o
@@ -584,11 +583,11 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_ranges  0x00000338       0x60 ./src/cr_startup_lpc13.o
  .debug_ranges  0x00000398       0x18 ./src/i2c_mark1.o
  .debug_ranges  0x000003b0       0x30 ./src/i2cslave.o
- .debug_ranges  0x000003e0       0x30 ./src/main.o
- .debug_ranges  0x00000410       0x18 ./src/msccallback.o
- .debug_ranges  0x00000428       0x20 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+ .debug_ranges  0x000003e0       0x28 ./src/main.o
+ .debug_ranges  0x00000408       0x18 ./src/msccallback.o
+ .debug_ranges  0x00000420       0x20 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_line     0x00000000     0x5f96
+.debug_line     0x00000000     0x5f7a
  .debug_line    0x00000000       0xe3 ./src/chan fat fs/option/ccsbcs.o
  .debug_line    0x000000e3      0x552 ./src/chan fat fs/diskio.o
  .debug_line    0x00000635      0xe31 ./src/chan fat fs/ff.o
@@ -600,13 +599,13 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_line    0x00003469      0x678 ./src/Timers.o
  .debug_line    0x00003ae1      0x473 ./src/cr_startup_lpc13.o
  .debug_line    0x00003f54      0x5fe ./src/i2c_mark1.o
- .debug_line    0x00004552      0x69a ./src/i2cslave.o
- .debug_line    0x00004bec      0x64b ./src/main.o
- .debug_line    0x00005237      0x4f1 ./src/msccallback.o
- .debug_line    0x00005728      0x411 ./src/usbdesc.o
- .debug_line    0x00005b39      0x45d D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+ .debug_line    0x00004552      0x69c ./src/i2cslave.o
+ .debug_line    0x00004bee      0x62d ./src/main.o
+ .debug_line    0x0000521b      0x4f1 ./src/msccallback.o
+ .debug_line    0x0000570c      0x411 ./src/usbdesc.o
+ .debug_line    0x00005b1d      0x45d D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_macinfo  0x00000000    0x7aaca
+.debug_macinfo  0x00000000    0x7ab42
  .debug_macinfo
                 0x00000000     0x2885 ./src/chan fat fs/option/ccsbcs.o
  .debug_macinfo
@@ -614,33 +613,33 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_macinfo
                 0x00009fd8     0x3336 ./src/chan fat fs/ff.o
  .debug_macinfo
-                0x0000d30e     0x94b2 ./src/BoardSupport.o
+                0x0000d30e     0x94d4 ./src/BoardSupport.o
  .debug_macinfo
-                0x000167c0     0x95b2 ./src/ButtonDetect.o
+                0x000167e2     0x95b2 ./src/ButtonDetect.o
  .debug_macinfo
-                0x0001fd72     0x77c1 ./src/FLASH.o
+                0x0001fd94     0x77c1 ./src/FLASH.o
  .debug_macinfo
-                0x00027533     0x94b2 ./src/FPGA_Config.o
+                0x00027555     0x94d4 ./src/FPGA_Config.o
  .debug_macinfo
-                0x000309e5     0x9551 ./src/System.o
+                0x00030a29     0x9551 ./src/System.o
  .debug_macinfo
-                0x00039f36     0x9517 ./src/Timers.o
+                0x00039f7a     0x9517 ./src/Timers.o
  .debug_macinfo
-                0x0004344d     0x3d30 ./src/cr_startup_lpc13.o
+                0x00043491     0x3d30 ./src/cr_startup_lpc13.o
  .debug_macinfo
-                0x0004717d     0x9513 ./src/i2c_mark1.o
+                0x000471c1     0x9513 ./src/i2c_mark1.o
  .debug_macinfo
-                0x00050690     0x95f5 ./src/i2cslave.o
+                0x000506d4     0x9617 ./src/i2cslave.o
  .debug_macinfo
-                0x00059c85     0x94c2 ./src/main.o
+                0x00059ceb     0x94d4 ./src/main.o
  .debug_macinfo
-                0x00063147     0x7f9d ./src/msccallback.o
+                0x000631bf     0x7f9d ./src/msccallback.o
  .debug_macinfo
-                0x0006b0e4     0x80d9 ./src/usbdesc.o
+                0x0006b15c     0x80d9 ./src/usbdesc.o
  .debug_macinfo
-                0x000731bd     0x790d D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+                0x00073235     0x790d D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_str      0x00000000     0x1826
+.debug_str      0x00000000     0x180e
  .debug_str     0x00000000      0x12f ./src/chan fat fs/option/ccsbcs.o
                                 0x15c (size before relaxing)
  .debug_str     0x0000012f      0x10d ./src/chan fat fs/diskio.o
@@ -665,13 +664,13 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
                                 0x1bf (size before relaxing)
  .debug_str     0x0000159c      0x153 ./src/i2cslave.o
                                 0xabb (size before relaxing)
- .debug_str     0x000016ef       0x32 ./src/main.o
-                                0x6f3 (size before relaxing)
- .debug_str     0x00001721       0x4e ./src/msccallback.o
+ .debug_str     0x000016ef       0x1a ./src/main.o
+                                0x6db (size before relaxing)
+ .debug_str     0x00001709       0x4e ./src/msccallback.o
                                 0x1b7 (size before relaxing)
- .debug_str     0x0000176f       0x11 ./src/usbdesc.o
+ .debug_str     0x00001757       0x11 ./src/usbdesc.o
                                 0x15f (size before relaxing)
- .debug_str     0x00001780       0xa6 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+ .debug_str     0x00001768       0xa6 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
                                 0x44f (size before relaxing)
 
 .comment        0x00000000       0x70
@@ -728,7 +727,7 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .ARM.attributes
                 0x000002fd       0x33 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
 
-.debug_frame    0x00000000      0xec8
+.debug_frame    0x00000000      0xea8
  .debug_frame   0x00000000       0x48 ./src/chan fat fs/option/ccsbcs.o
  .debug_frame   0x00000048       0xbc ./src/chan fat fs/diskio.o
  .debug_frame   0x00000104      0x58c ./src/chan fat fs/ff.o
@@ -741,6 +740,6 @@ OUTPUT(Mark1_DragDrop_Config.axf elf32-littlearm)
  .debug_frame   0x00000b68      0x120 ./src/cr_startup_lpc13.o
  .debug_frame   0x00000c88       0x48 ./src/i2c_mark1.o
  .debug_frame   0x00000cd0       0xa0 ./src/i2cslave.o
- .debug_frame   0x00000d70       0xa4 ./src/main.o
- .debug_frame   0x00000e14       0x50 ./src/msccallback.o
- .debug_frame   0x00000e64       0x64 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
+ .debug_frame   0x00000d70       0x84 ./src/main.o
+ .debug_frame   0x00000df4       0x50 ./src/msccallback.o
+ .debug_frame   0x00000e44       0x64 D:\Dropbox\Prj\Valent\LOGI-FAMILY\SRC\Mark1\MCU\Mark1_DragDrop_Config\CMSISv1p30_LPC13xx\Debug\libCMSISv1p30_LPC13xx.a(system_LPC13xx.o)
