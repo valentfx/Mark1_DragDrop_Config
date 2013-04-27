@@ -37,7 +37,8 @@ void InitGPIO()
 	//SETUP MASTER SENSE PIN
 	LPC_GPIO2->DIR &= ~MASTER_SENSE_LOC; 	//INPUT
 	//LPC_IOCON->PIO2_10 &= ~(1<<4);		//disable pullup/down hyst, open drain
-	LPC_IOCON->PIO2_10 = 0;					//disable pullup/down hyst, open drain
+	//LPC_IOCON->PIO2_10 = 0;					//disable pullup/down hyst, open drain
+	LPC_IOCON->PIO2_10 = 1<<3;					//pull down enabled,  stop from floating up when no host is connected
 
 
 	// I2C PINS SETUP IN I2CSLAVE INIT
